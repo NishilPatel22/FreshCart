@@ -1,5 +1,4 @@
 <?php
-
 include 'components/connect.php';
 
 session_start();
@@ -10,6 +9,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+
+// Check if an order has already been placed in this session
+// if (isset($_SESSION['order_placed'])) {
+//    // Redirect to a different page to prevent resubmission
+//    header('Location: already_ordered.php');
+//    exit;
+// }
 
 if (isset($_POST['order'])) {
 
@@ -49,6 +55,9 @@ if (isset($_POST['order'])) {
    $delete_cart->execute([$user_id]);
 
    $message = 'Order placed successfully!';
+   
+   // Mark order as placed to prevent multiple submissions
+   $_SESSION['order_placed'] = true;
 } else {
    $message = 'Your cart is empty';
 }
@@ -90,10 +99,10 @@ if (isset($_POST['order'])) {
             $select_cart->execute([$user_id]);
             if ($select_cart->rowCount() > 0) {
                while ($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)) {
-                  $cart_items[] = $fetch_cart['name'] . ' (' . '$' . $fetch_cart['price'] . '/- x ' . $fetch_cart['quantity'] . ')';
+                  $cart_items[] = $fetch_cart['name'] . ' (' . '₹' . $fetch_cart['price'] . '/- x ' . $fetch_cart['quantity'] . ')';
                   $grand_total += ($fetch_cart['price'] * $fetch_cart['quantity']);
             ?>
-                  <p><?= $fetch_cart['name']; ?> <span>(<?= '$' . $fetch_cart['price'] . '/- x ' . $fetch_cart['quantity']; ?>)</span> </p>
+                  <p><?= $fetch_cart['name']; ?> <span>(<?= '₹' . $fetch_cart['price'] . '/- x ' . $fetch_cart['quantity']; ?>)</span> </p>
             <?php
                }
             } else {

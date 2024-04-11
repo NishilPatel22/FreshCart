@@ -62,7 +62,31 @@ if(isset($_GET['delete'])){
       <p> name : <span><?= $fetch_orders['name']; ?></span> </p>
       <p> number : <span><?= $fetch_orders['number']; ?></span> </p>
       <p> address : <span><?= $fetch_orders['address']; ?></span> </p>
-      <p> total products : <span><?= $fetch_orders['total_products']; ?></span> </p>
+      <!-- <p> total products : <span><?= $fetch_orders['total_products']; ?></span> </p> -->
+      <p> total products : 
+    <span>
+        <?php 
+            $total_products = $fetch_orders['total_products'];
+            $products_array = explode(',', $total_products);
+            foreach($products_array as $product){
+                // Checking if product contains a price part
+                if(strpos($product, '($') !== false){
+                    // Splitting product into name and price
+                    list($product_name, $product_price) = explode('($', $product);
+                    // Extracting price and removing the closing bracket
+                    $product_price = strtok($product_price, ')/');
+                    // Displaying product name and formatted price
+                    echo $product_name . " (₹" . $product_price . "/-), ";
+                } else {
+                    // If price part not found, display product as is
+                    echo $product . ", ";
+                }
+            }
+        ?>
+    </span> 
+</p>
+
+
       <p> total price : <span>₹<?= $fetch_orders['total_price']; ?>/-</span> </p>
       <p> payment method : <span><?= $fetch_orders['method']; ?></span> </p>
       <form action="" method="post">

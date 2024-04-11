@@ -1,14 +1,16 @@
 <?php
-   if(isset($message)){
-      foreach($message as $message){
+   if(isset($message) && is_array($message)){
+      foreach($message as $msg){
          echo '
          <div class="message">
-            <span>'.$message.'</span>
+            <span>'.$msg.'</span>
             <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
          </div>
          ';
       }
    }
+   // You should define error_reporting level to prevent further warnings or errors
+   error_reporting(E_ALL); // Or any level you prefer
 ?>
 
 <header class="header">
@@ -47,7 +49,7 @@
             $select_profile = $conn->prepare("SELECT * FROM `users` WHERE id = ?");
             $select_profile->execute([$user_id]);
             if($select_profile->rowCount() > 0){
-            $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+               $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
          ?>
          <p><?= $fetch_profile["name"]; ?></p>
          <a href="update_user.php" class="btn">update profile</a>
