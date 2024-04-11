@@ -102,7 +102,7 @@ if (isset($_POST['order'])) {
             ?>
             <input type="hidden" name="total_products" value="<?= implode(', ', $cart_items); ?>">
             <input type="hidden" name="total_price" value="<?= $grand_total; ?>">
-            <div class="grand-total">Grand Total: <span>$<?= $grand_total; ?>/-</span></div>
+            <div class="grand-total">Grand Total: <span>₹<?= $grand_total; ?>/-</span></div>
          </div>
 
          <h3>Place Your Orders</h3>
